@@ -30,6 +30,9 @@ public interface IUserService {
      * @throws ApiRequestException
      */
     default String loginUser(User user) throws ApiRequestException {
+
+        user.validateUserFields();
+
         return loginUser(user.getEmail(), user.getPassword());
     }
 
