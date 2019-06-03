@@ -35,11 +35,10 @@ public class User implements Serializable {
 
     public User(@NotNull String userId, @NotNull String displayName, @NotNull String email, @NotNull String password) {
         this.userId = userId;
-        setDisplayName(displayName);
-        setEmail(email);
-        setPassword(password);
+        this.displayName = displayName;
+        this.email = email;
+        this.password = password;
     }
-
 
     public String getUserId() {
         return userId;
@@ -49,32 +48,12 @@ public class User implements Serializable {
         return displayName;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) throws ApiRequestException {
-        if (validateEmail(email)) {
-            this.email = email;
-        } else {
-            throw new ApiRequestException("Invalid email address", HttpStatus.BAD_REQUEST);
-        }
-    }
-
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) throws ApiRequestException {
-        if (validatePassword(password)) {
-            this.password = password;
-        } else {
-            throw new ApiRequestException("Password must contain at least 8 characters", HttpStatus.BAD_REQUEST);
-        }
     }
 
     @Override
@@ -101,24 +80,51 @@ public class User implements Serializable {
     }
 
     /**
+     * Validate display name.
+     *
+     * @param displayName display name
+     * @throws ApiRequestException
+     */
+    private void validateDisplayName(String displayName) throws ApiRequestException {
+        if (displayName == null || displayName.isEmpty() || displayName.equals(" ")) {
+            throw new ApiRequestException("Invalid display name", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
      * Validate email address.
      *
      * @param email email
-     * @return true if email is valid
+     * @throws ApiRequestException
      */
-    private boolean validateEmail(String email) {
+    private void validateEmail(String email) throws ApiRequestException {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
-        return matcher.find();
+        if (!matcher.find()) {
+            throw new ApiRequestException("Invalid email address", HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**
      * Validate password.
      *
      * @param password password
-     * @return true if password is valid
+     * @throws ApiRequestException
      */
-    private boolean validatePassword(String password) {
-        return password.length() >= 8;
+    private void validatePassword(String password) {
+        if (!(password.length() >= 8)) {
+            throw new ApiRequestException("Password must contain at least 8 characters", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * Validate user fields upon registration.
+     *
+     * @throws ApiRequestException
+     */
+    public void validateUserFields() throws ApiRequestException {
+        validateDisplayName(getDisplayName());
+        validateEmail(getEmail());
+        validatePassword(getPassword());
     }
 
 }
