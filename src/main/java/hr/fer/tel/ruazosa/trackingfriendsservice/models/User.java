@@ -11,6 +11,9 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * User models are saved in Mongo DB
+ */
 @Document(collection = "Users")
 public class User implements Serializable {
 
