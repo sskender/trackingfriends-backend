@@ -56,6 +56,18 @@ public class User implements Serializable {
         return password;
     }
 
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -85,7 +97,7 @@ public class User implements Serializable {
      * @param displayName display name
      * @throws ApiRequestException
      */
-    private void validateDisplayName(String displayName) throws ApiRequestException {
+    public void validateDisplayName(String displayName) throws ApiRequestException {
         if (displayName == null || displayName.isEmpty() || displayName.equals(" ")) {
             throw new ApiRequestException("Invalid display name", HttpStatus.BAD_REQUEST);
         }
@@ -97,7 +109,7 @@ public class User implements Serializable {
      * @param email email
      * @throws ApiRequestException
      */
-    private void validateEmail(String email) throws ApiRequestException {
+    public void validateEmail(String email) throws ApiRequestException {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
         if (!matcher.find()) {
             throw new ApiRequestException("Invalid email address", HttpStatus.BAD_REQUEST);
@@ -110,7 +122,7 @@ public class User implements Serializable {
      * @param password password
      * @throws ApiRequestException
      */
-    private void validatePassword(String password) {
+    public void validatePassword(String password) {
         if (!(password.length() >= 8)) {
             throw new ApiRequestException("Password must contain at least 8 characters", HttpStatus.BAD_REQUEST);
         }

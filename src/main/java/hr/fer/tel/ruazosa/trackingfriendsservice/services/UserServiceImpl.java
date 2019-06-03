@@ -20,10 +20,12 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void checkIfUserIdExists(String userId) throws ApiRequestException {
+    public User checkIfUserIdExists(String userId) throws ApiRequestException {
         Optional<User> optionalUser = userRepository.findById(userId);
 
-        if (!optionalUser.isPresent()) {
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
+        } else {
             throw new ApiRequestException("User with id " + userId + " does not exist", HttpStatus.NOT_FOUND);
         }
     }
@@ -56,6 +58,33 @@ public class UserServiceImpl implements IUserService {
         } else {
             throw new ApiRequestException("Invalid email or password", HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @Override
+    public String updateDisplayName(String userId, String displayName) throws ApiRequestException {
+        User user = checkIfUserIdExists(userId);
+
+        user.setDisplayName(displayName);
+
+        return userRepository.save(user).getUserId();
+    }
+
+    @Override
+    public String updateEmail(String userId, String email) throws ApiRequestException {
+        User user = checkIfUserIdExists(userId);
+
+        user.setEmail(email);
+
+        return userRepository.save(user).getUserId();
+    }
+
+    @Override
+    public String updatePassword(String userId, String password) throws ApiRequestException {
+        User user = checkIfUserIdExists(userId);
+
+        user.setPassword(password);
+
+        return userRepository.save(user).getUserId();
     }
 
 }
