@@ -50,75 +50,38 @@ public interface IUserService {
     String loginUser(String email, String password) throws ApiRequestException;
 
     /**
-     * Update user's display name.
+     * Update user as object.
      *
-     * @param user User object
-     * @return user id
+     * @param user user object
      * @throws ApiRequestException
      */
-    default String updateDisplayName(User user) throws ApiRequestException {
-
-        user.validateDisplayName(user.getDisplayName());
-
-        return updateDisplayName(user.getUserId(), user.getDisplayName());
-    }
+    void updateUser(User user) throws ApiRequestException;
 
     /**
      * Update user's display name.
      *
      * @param userId      user id
      * @param displayName new display name
-     * @return user id
      * @throws ApiRequestException
      */
-    String updateDisplayName(String userId, String displayName) throws ApiRequestException;
-
-    /**
-     * Update user's email.
-     *
-     * @param user User object
-     * @return user id
-     * @throws ApiRequestException
-     */
-    default String updateEmail(User user) throws ApiRequestException {
-
-        user.validateEmail(user.getEmail());
-
-        return updateEmail(user.getUserId(), user.getEmail());
-    }
+    void updateDisplayName(String userId, String displayName) throws ApiRequestException;
 
     /**
      * Update user's email.
      *
      * @param userId user id
      * @param email  new email
-     * @return user id
      * @throws ApiRequestException
      */
-    String updateEmail(String userId, String email) throws ApiRequestException;
-
-    /**
-     * Update user's password.
-     *
-     * @param user User object
-     * @return user id
-     * @throws ApiRequestException
-     */
-    default String updatePassword(User user) throws ApiRequestException {
-
-        user.validatePassword(user.getPassword());
-
-        return updatePassword(user.getUserId(), user.getPassword());
-    }
+    void updateEmail(String userId, String email) throws ApiRequestException;
 
     /**
      * Update user's password.
      *
      * @param userId   user id
      * @param password new password
-     * @return user id
      * @throws ApiRequestException
      */
-    String updatePassword(String userId, String password) throws ApiRequestException;
+    void updatePassword(String userId, String password) throws ApiRequestException;
 
 }

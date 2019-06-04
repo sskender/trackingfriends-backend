@@ -61,30 +61,50 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public String updateDisplayName(String userId, String displayName) throws ApiRequestException {
+    public void updateUser(User user) throws ApiRequestException {
+        checkIfUserIdExists(user.getUserId());
+
+        if (user.getDisplayName() != null) {
+            updateDisplayName(user.getUserId(), user.getDisplayName());
+        }
+
+        if (user.getEmail() != null) {
+            updateEmail(user.getUserId(), user.getEmail());
+        }
+
+        if (user.getPassword() != null) {
+            updatePassword(user.getUserId(), user.getPassword());
+        }
+    }
+
+    @Override
+    public void updateDisplayName(String userId, String displayName) throws ApiRequestException {
         User user = checkIfUserIdExists(userId);
 
+        user.validateDisplayName(displayName);
         user.setDisplayName(displayName);
 
-        return userRepository.save(user).getUserId();
+        userRepository.save(user);
     }
 
     @Override
-    public String updateEmail(String userId, String email) throws ApiRequestException {
+    public void updateEmail(String userId, String email) throws ApiRequestException {
         User user = checkIfUserIdExists(userId);
 
+        user.validateEmail(email);
         user.setEmail(email);
 
-        return userRepository.save(user).getUserId();
+        userRepository.save(user);
     }
 
     @Override
-    public String updatePassword(String userId, String password) throws ApiRequestException {
+    public void updatePassword(String userId, String password) throws ApiRequestException {
         User user = checkIfUserIdExists(userId);
 
+        user.validatePassword(password);
         user.setPassword(password);
 
-        return userRepository.save(user).getUserId();
+        userRepository.save(user);
     }
 
 }

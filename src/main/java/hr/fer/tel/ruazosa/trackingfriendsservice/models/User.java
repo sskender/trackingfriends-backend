@@ -40,6 +40,10 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public String getUserId() {
         return userId;
     }
