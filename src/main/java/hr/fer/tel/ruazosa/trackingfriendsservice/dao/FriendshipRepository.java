@@ -15,14 +15,11 @@ public interface FriendshipRepository extends MongoRepository<Friendship, String
      * see more info in model.Friendship.
      *
      * @param f Friendship object
-     * @return Friendship object saved to database
      */
-    default Friendship saveAcceptedFriendship(Friendship f) {
+    default void saveAcceptedFriendship(Friendship f) {
         // save record in both ways
         save(new Friendship(f.getUserId2(), f.getUserId1(), f.getFriendshipStatus()));
-
-        // return given Friendship object
-        return save(f);
+        save(f);
     }
 
     /**

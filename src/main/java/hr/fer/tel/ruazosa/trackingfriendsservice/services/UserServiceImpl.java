@@ -122,7 +122,7 @@ public class UserServiceImpl implements IUserService {
         Set<UserPublicProfile> friendsUserPublicProfileSet = new HashSet<>();
 
         for (Friendship f : friendshipList) {
-            UserPublicProfile friendRequestUserProfile = getUserWithId(f.getUserId2()).craftUserPublicProfile();
+            UserPublicProfile friendRequestUserProfile = getUserWithId(f.getUserId1()).craftUserPublicProfile();
             friendsUserPublicProfileSet.add(friendRequestUserProfile);
         }
 
