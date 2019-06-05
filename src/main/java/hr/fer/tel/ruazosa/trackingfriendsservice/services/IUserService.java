@@ -2,18 +2,28 @@ package hr.fer.tel.ruazosa.trackingfriendsservice.services;
 
 import hr.fer.tel.ruazosa.trackingfriendsservice.exceptions.ApiRequestException;
 import hr.fer.tel.ruazosa.trackingfriendsservice.models.User;
+import hr.fer.tel.ruazosa.trackingfriendsservice.models.UserPublicProfile;
 
-public interface IUserService {
+public interface IUserService extends IFriendshipService {
 
     /**
-     * Check if user with given id exists in database.
+     * Return user object from database if it exists in database.
      * (check if user is registered in system)
      *
      * @param userId user id
      * @return User object
      * @throws ApiRequestException
      */
-    User checkIfUserIdExists(String userId) throws ApiRequestException;
+    User getUserWithId(String userId) throws ApiRequestException;
+
+    /**
+     * Return user public profile from given user id.
+     *
+     * @param userId user id
+     * @return user public profile
+     * @throws ApiRequestException
+     */
+    UserPublicProfile getUserPublicProfileWithId(String userId) throws ApiRequestException;
 
     /**
      * Register new user on service.
@@ -22,7 +32,7 @@ public interface IUserService {
      * @return new user id
      * @throws ApiRequestException
      */
-    String registerUser(User user) throws ApiRequestException;
+    UserPublicProfile registerUser(User user) throws ApiRequestException;
 
     /**
      * Login existing user into service.
@@ -31,10 +41,10 @@ public interface IUserService {
      * @return user id
      * @throws ApiRequestException
      */
-    default String loginUser(User user) throws ApiRequestException {
+    default UserPublicProfile loginUser(User user) throws ApiRequestException {
 
-        user.validateEmail(user.getEmail());
-        user.validatePassword(user.getPassword());
+        User.validateEmail(user.getEmail());
+        User.validatePassword(user.getPassword());
 
         return loginUser(user.getEmail(), user.getPassword());
     }
@@ -47,7 +57,7 @@ public interface IUserService {
      * @return user id
      * @throws ApiRequestException
      */
-    String loginUser(String email, String password) throws ApiRequestException;
+    UserPublicProfile loginUser(String email, String password) throws ApiRequestException;
 
     /**
      * Update user as object.
@@ -56,32 +66,5 @@ public interface IUserService {
      * @throws ApiRequestException
      */
     void updateUser(User user) throws ApiRequestException;
-
-    /**
-     * Update user's display name.
-     *
-     * @param userId      user id
-     * @param displayName new display name
-     * @throws ApiRequestException
-     */
-    void updateDisplayName(String userId, String displayName) throws ApiRequestException;
-
-    /**
-     * Update user's email.
-     *
-     * @param userId user id
-     * @param email  new email
-     * @throws ApiRequestException
-     */
-    void updateEmail(String userId, String email) throws ApiRequestException;
-
-    /**
-     * Update user's password.
-     *
-     * @param userId   user id
-     * @param password new password
-     * @throws ApiRequestException
-     */
-    void updatePassword(String userId, String password) throws ApiRequestException;
 
 }

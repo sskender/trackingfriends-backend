@@ -26,7 +26,7 @@ public class LocationServiceImpl implements ILocationService {
         // check if user is registered
         // update location
 
-        userService.checkIfUserIdExists(location.getUserId());
+        userService.getUserWithId(location.getUserId());
 
         return locationRepository.save(location);
     }
@@ -38,8 +38,8 @@ public class LocationServiceImpl implements ILocationService {
         // check if friends
         // check if location exists
 
-        userService.checkIfUserIdExists(userId);
-        userService.checkIfUserIdExists(friendId);
+        userService.getUserWithId(userId);
+        userService.getUserWithId(friendId);
 
         // TODO check if friends
 

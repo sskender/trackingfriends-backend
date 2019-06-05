@@ -101,7 +101,7 @@ public class User implements Serializable {
      * @param displayName display name
      * @throws ApiRequestException
      */
-    public void validateDisplayName(String displayName) throws ApiRequestException {
+    public static void validateDisplayName(String displayName) throws ApiRequestException {
         if (displayName == null || displayName.isEmpty() || displayName.equals(" ")) {
             throw new ApiRequestException("Invalid display name", HttpStatus.BAD_REQUEST);
         }
@@ -113,7 +113,7 @@ public class User implements Serializable {
      * @param email email
      * @throws ApiRequestException
      */
-    public void validateEmail(String email) throws ApiRequestException {
+    public static void validateEmail(String email) throws ApiRequestException {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
         if (!matcher.find()) {
             throw new ApiRequestException("Invalid email address", HttpStatus.BAD_REQUEST);
@@ -126,7 +126,7 @@ public class User implements Serializable {
      * @param password password
      * @throws ApiRequestException
      */
-    public void validatePassword(String password) {
+    public static void validatePassword(String password) {
         if (!(password.length() >= 8)) {
             throw new ApiRequestException("Password must contain at least 8 characters", HttpStatus.BAD_REQUEST);
         }
@@ -141,6 +141,17 @@ public class User implements Serializable {
         validateDisplayName(getDisplayName());
         validateEmail(getEmail());
         validatePassword(getPassword());
+    }
+
+    /**
+     * Create user public profile from user object.
+     * Public profile only contains user id and public display name.
+     * Email and password must not be leaked.
+     *
+     * @return user public profile object
+     */
+    public UserPublicProfile craftUserPublicProfile() {
+        return new UserPublicProfile(getUserId(), getDisplayName());
     }
 
 }

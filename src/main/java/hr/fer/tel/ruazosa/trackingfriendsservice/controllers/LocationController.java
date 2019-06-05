@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(BaseApiUrl.BASE_API_URL + "/{userId}/location")
+@RequestMapping(BaseApiUrl.BASE_API_URL + "/user/{userId}/location")
 public class LocationController {
 
     private final ILocationService locationService;
