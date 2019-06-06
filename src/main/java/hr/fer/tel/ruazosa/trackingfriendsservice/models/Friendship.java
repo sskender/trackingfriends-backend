@@ -25,8 +25,8 @@ public class Friendship implements Serializable {
     private String userId2;
     private FriendshipStatus friendshipStatus;
 
-    protected Friendship() {
-
+    public Friendship() {
+        super();
     }
 
     public Friendship(@NotNull String userId1, @NotNull String userId2, @NotNull FriendshipStatus friendshipStatus) throws ApiRequestException {

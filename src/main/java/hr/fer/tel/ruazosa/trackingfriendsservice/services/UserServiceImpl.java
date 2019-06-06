@@ -105,7 +105,7 @@ public class UserServiceImpl implements IUserService {
         Set<UserPublicProfile> friendsUserPublicProfileSet = new HashSet<>();
 
         for (Friendship f : friendshipList) {
-            UserPublicProfile friendUserProfile = getUserWithId(f.getUserId1()).craftUserPublicProfile();
+            UserPublicProfile friendUserProfile = getUserWithId(f.getUserId2()).craftUserPublicProfile();
             friendsUserPublicProfileSet.add(friendUserProfile);
         }
 
@@ -147,9 +147,6 @@ public class UserServiceImpl implements IUserService {
         // TODO check pending request exist
 
         // delete pending request
-//        Friendship oldFriendshipRequest = new Friendship(friendRequestId, userId, FriendshipStatus.PENDING);
-//        friendshipRepository.delete(oldFriendshipRequest);
-
         friendshipRepository.deletePendingFriendRequests(userId, friendRequestId);
 
         // save accepted friendship
@@ -162,8 +159,8 @@ public class UserServiceImpl implements IUserService {
 
         // TODO check pending request exist
 
-        Friendship friendshipRequestToDeny = new Friendship(friendRequestId, userId, FriendshipStatus.PENDING);
-        friendshipRepository.delete(friendshipRequestToDeny);
+        // delete pending request
+        friendshipRepository.deletePendingFriendRequests(userId, friendRequestId);
     }
 
 }
