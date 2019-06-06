@@ -50,6 +50,12 @@ public interface FriendshipRepository extends MongoRepository<Friendship, String
      * @return list of Friendship objects
      */
     @Query("{ 'userId1' : { $in : [ ?0 , ?1 ] } , 'userId2' : { $in : [ ?0 , ?1 ] } }")
-    List<Friendship> findConnections(String userId1, String userId2);
+    List<Friendship> findFriendshipConnections(String userId1, String userId2);
+
+    @Query(value = "{ 'userId1' : { $in : [ ?0 , ?1 ] } , 'userId2' : { $in : [ ?0 , ?1 ] } , 'friendshipStatus' : 'PENDING' }", delete = true)
+    List<Friendship> deletePendingFriendRequests(String userId1, String userId2);
+
+    @Query(value = "{ 'userId1' : { $in : [ ?0 , ?1 ] } , 'userId2' : { $in : [ ?0 , ?1 ] } , 'friendshipStatus' : 'ACCEPTED' }", delete = true)
+    List<Friendship> deleteAcceptedFriendship(String userId1, String userId2);
 
 }

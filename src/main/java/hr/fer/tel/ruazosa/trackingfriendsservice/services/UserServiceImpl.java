@@ -147,8 +147,10 @@ public class UserServiceImpl implements IUserService {
         // TODO check pending request exist
 
         // delete pending request
-        Friendship oldFriendshipRequest = new Friendship(friendRequestId, userId, FriendshipStatus.PENDING);
-        friendshipRepository.delete(oldFriendshipRequest);
+//        Friendship oldFriendshipRequest = new Friendship(friendRequestId, userId, FriendshipStatus.PENDING);
+//        friendshipRepository.delete(oldFriendshipRequest);
+
+        friendshipRepository.deletePendingFriendRequests(userId, friendRequestId);
 
         // save accepted friendship
         Friendship newFriendship = new Friendship(userId, friendRequestId, FriendshipStatus.ACCEPTED);
