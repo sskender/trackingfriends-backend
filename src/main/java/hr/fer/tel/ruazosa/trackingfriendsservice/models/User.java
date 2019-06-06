@@ -36,7 +36,7 @@ public class User implements Serializable {
     public User(@NotNull String userId, @NotNull String displayName, @NotNull String email, @NotNull String password) {
         this.userId = userId;
         this.displayName = displayName;
-        this.email = email;
+        this.email = email.toLowerCase();
         this.password = password;
     }
 
@@ -61,7 +61,7 @@ public class User implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.toLowerCase();
     }
 
     public String getPassword() {
