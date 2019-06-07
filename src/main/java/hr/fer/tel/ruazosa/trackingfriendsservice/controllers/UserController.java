@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -87,26 +89,28 @@ public class UserController {
 
     @GetMapping("/{userId}/friends")
     public ResponseEntity<Set<UserPublicProfile>> getFriends(
-            @Valid @PathVariable String userId
+            @Valid @PathVariable String userId,
+            @Valid @RequestParam int start
     ) {
 
         // TODO paging
 
-        Set<UserPublicProfile> friends = userService.getUsersFriends(userId);
-
-        return new ResponseEntity<>(friends, HttpStatus.OK);
+        List<UserPublicProfile> friends = userService.getUsersFriends(userId, start);
+        Set<UserPublicProfile> returnValue = new HashSet<>(friends);
+        return new ResponseEntity<>(returnValue, HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/friends/requests")
     public ResponseEntity<Set<UserPublicProfile>> getFriendRequests(
-            @Valid @PathVariable String userId
+            @Valid @PathVariable String userId,
+            @Valid @RequestParam int start
     ) {
 
         // TODO paging
 
-        Set<UserPublicProfile> friendRequests = userService.getUsersFriendRequests(userId);
-
-        return new ResponseEntity<>(friendRequests, HttpStatus.OK);
+        List<UserPublicProfile> friendRequests = userService.getUsersFriendRequests(userId, start);
+        Set<UserPublicProfile> returnValue = new HashSet<>(friendRequests);
+        return new ResponseEntity<>(returnValue, HttpStatus.OK);
     }
 
     @PostMapping("/{userId}/friends")

@@ -8,17 +8,19 @@ import hr.fer.tel.ruazosa.trackingfriendsservice.models.FriendshipStatus;
 import hr.fer.tel.ruazosa.trackingfriendsservice.models.User;
 import hr.fer.tel.ruazosa.trackingfriendsservice.models.UserPublicProfile;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.awt.print.Pageable;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements IUserService {
 
+    private  static final int PAGE_SIZE = 20;
     private final UserRepository userRepository;
     private final FriendshipRepository friendshipRepository;
 
@@ -97,37 +99,45 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public Set<UserPublicProfile> getUsersFriends(String userId) throws ApiRequestException {
+    public List<UserPublicProfile> getAllUsers(int start) {
+        Pageable request = (Pageable) PageRequest.of(start, start + PAGE_SIZE);
+        List<UserPublicProfile> list = userRepository.findAll((org.springframework.data.domain.Pageable) request).stream().map(u -> u.craftUserPublicProfile()).collect(Collectors.toList());
+        return list;
+    }
+
+    @Override
+    public List<UserPublicProfile> getUsersFriends(String userId, int start) throws ApiRequestException {
+        // TODO learn Page
         // get friends ids from database
         List<Friendship> friendshipList = friendshipRepository.findAllFriends(userId);
 
         // craft user public profile from friend ids
-        Set<UserPublicProfile> friendsUserPublicProfileSet = new HashSet<>();
+        List<UserPublicProfile> friendsUserPublicProfileList = new ArrayList<>();
 
         for (Friendship f : friendshipList) {
             UserPublicProfile friendUserProfile = getUserWithId(f.getUserId2()).craftUserPublicProfile();
-            friendsUserPublicProfileSet.add(friendUserProfile);
+            friendsUserPublicProfileList.add(friendUserProfile);
         }
 
         // return user public profiles of friends
-        return friendsUserPublicProfileSet;
+        return friendsUserPublicProfileList.subList(start, start + PAGE_SIZE);
     }
 
     @Override
-    public Set<UserPublicProfile> getUsersFriendRequests(String userId) throws ApiRequestException {
+    public List<UserPublicProfile> getUsersFriendRequests(String userId, int start) throws ApiRequestException {
         // get friend requests ids from database
         List<Friendship> friendshipList = friendshipRepository.findPendingFriendRequests(userId);
 
         // craft user public profile from friend requests ids
-        Set<UserPublicProfile> friendsUserPublicProfileSet = new HashSet<>();
+        List<UserPublicProfile> friendsUserPublicProfileList = new ArrayList<>();
 
         for (Friendship f : friendshipList) {
             UserPublicProfile friendRequestUserProfile = getUserWithId(f.getUserId1()).craftUserPublicProfile();
-            friendsUserPublicProfileSet.add(friendRequestUserProfile);
+            friendsUserPublicProfileList.add(friendRequestUserProfile);
         }
 
         // return user public profiles of friend requests
-        return friendsUserPublicProfileSet;
+        return friendsUserPublicProfileList.subList(start, start + PAGE_SIZE);
     }
 
     @Override
