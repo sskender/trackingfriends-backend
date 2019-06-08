@@ -51,6 +51,8 @@ public class UserServiceImpl implements IUserService {
         if (optionalUser.isPresent()) {
             throw new ApiRequestException("Sorry, that email is already taken", HttpStatus.CONFLICT);
         } else {
+            // remove id, database will create an id
+            user.setUserId(null);
 
             // validate user before saving
             user.validateUserFields();

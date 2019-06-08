@@ -73,9 +73,7 @@ public class UserController {
             @Valid @PathVariable String userId,
             @Valid @RequestBody User user
     ) {
-        user.setUserId(userId);
-
-        userService.updateUser(user);
+        userService.updateUser(userId, user);
 
         return new ResponseEntity<>(null, HttpStatus.OK);
     }

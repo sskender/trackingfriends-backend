@@ -62,6 +62,18 @@ public interface IUserService extends IFriendshipService {
     /**
      * Update user as object.
      *
+     * @param userId user id
+     * @param user   user object
+     * @throws ApiRequestException
+     */
+    default void updateUser(String userId, User user) throws ApiRequestException {
+        user.setUserId(userId);
+        updateUser(user);
+    }
+
+    /**
+     * Update user as object.
+     *
      * @param user user object
      * @throws ApiRequestException
      */
