@@ -24,7 +24,7 @@ public class User implements Serializable {
 
     @Id
     private String userId;
-    private String displayName;
+    private String username;
     private String email;
     private String password;
 
@@ -33,9 +33,9 @@ public class User implements Serializable {
 
     }
 
-    public User(@NotNull String userId, @NotNull String displayName, @NotNull String email, @NotNull String password) {
+    public User(@NotNull String userId, @NotNull String username, @NotNull String email, @NotNull String password) {
         this.userId = userId;
-        this.displayName = displayName;
+        this.username = username;
         this.email = email.toLowerCase();
         this.password = password;
     }
@@ -48,12 +48,20 @@ public class User implements Serializable {
         this.userId = userId;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    /**
+     * Validate display name.
+     *
+     * @param username display name
+     * @throws ApiRequestException
+     */
+    public static void validateDisplayName(String username) throws ApiRequestException {
+        if (username == null || username.isEmpty() || username.equals(" ")) {
+            throw new ApiRequestException("Invalid display name", HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public String getUsername() {
+        return username;
     }
 
     public String getEmail() {
@@ -85,26 +93,18 @@ public class User implements Serializable {
         return Objects.hash(getUserId());
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "userId='" + userId + '\'' +
-                ", displayName='" + displayName + '\'' +
+                ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
-    }
-
-    /**
-     * Validate display name.
-     *
-     * @param displayName display name
-     * @throws ApiRequestException
-     */
-    public static void validateDisplayName(String displayName) throws ApiRequestException {
-        if (displayName == null || displayName.isEmpty() || displayName.equals(" ")) {
-            throw new ApiRequestException("Invalid display name", HttpStatus.BAD_REQUEST);
-        }
     }
 
     /**
@@ -138,7 +138,7 @@ public class User implements Serializable {
      * @throws ApiRequestException
      */
     public void validateUserFields() throws ApiRequestException {
-        validateDisplayName(getDisplayName());
+        validateDisplayName(getUsername());
         validateEmail(getEmail());
         validatePassword(getPassword());
     }
@@ -151,7 +151,7 @@ public class User implements Serializable {
      * @return user public profile object
      */
     public UserPublicProfile craftUserPublicProfile() {
-        return new UserPublicProfile(getUserId(), getDisplayName());
+        return new UserPublicProfile(getUserId(), getUsername());
     }
 
 }

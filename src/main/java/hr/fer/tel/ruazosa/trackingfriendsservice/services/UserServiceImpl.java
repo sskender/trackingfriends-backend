@@ -80,9 +80,9 @@ public class UserServiceImpl implements IUserService {
     public void updateUser(User user) throws ApiRequestException {
         User userToBeUpdated = getUserWithId(user.getUserId());
 
-        if (user.getDisplayName() != null) {
-            User.validateDisplayName(user.getDisplayName());
-            userToBeUpdated.setDisplayName(user.getDisplayName());
+        if (user.getUsername() != null) {
+            User.validateDisplayName(user.getUsername());
+            userToBeUpdated.setUsername(user.getUsername());
         }
 
         if (user.getEmail() != null) {

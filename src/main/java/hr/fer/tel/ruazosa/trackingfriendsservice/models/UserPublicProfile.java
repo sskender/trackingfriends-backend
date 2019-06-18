@@ -8,11 +8,11 @@ import java.util.Objects;
 public class UserPublicProfile implements Serializable {
 
     private String userId;
-    private String displayName;
+    private String username;
 
-    public UserPublicProfile(@NonNull String userId, @NonNull String displayName) {
+    public UserPublicProfile(@NonNull String userId, @NonNull String username) {
         this.userId = userId;
-        this.displayName = displayName;
+        this.username = username;
     }
 
     public String getUserId() {
@@ -23,12 +23,12 @@ public class UserPublicProfile implements Serializable {
         this.userId = userId;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class UserPublicProfile implements Serializable {
     public String toString() {
         return "UserPublicProfile{" +
                 "userId='" + userId + '\'' +
-                ", displayName='" + displayName + '\'' +
+                ", username='" + username + '\'' +
                 '}';
     }
 
