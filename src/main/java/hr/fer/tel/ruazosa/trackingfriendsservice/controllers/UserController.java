@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -133,7 +134,21 @@ public class UserController {
     /* friendship */
 
 
-    // TODO search users
+    /* searching users */
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserPublicProfile>> seachUsers(
+            @Valid @RequestParam(value = "username", required = true) String username
+    ) {
+
+        // TODO paging
+
+        List<UserPublicProfile> userPublicProfileList = userService.searchUsersForFriends(username);
+
+        return new ResponseEntity<>(userPublicProfileList, HttpStatus.OK);
+    }
+
+    /* searching users */
 
 
 }

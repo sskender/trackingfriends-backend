@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -96,6 +97,13 @@ public class UserServiceImpl implements IUserService {
         }
 
         userRepository.save(userToBeUpdated);
+    }
+
+    @Override
+    public List<UserPublicProfile> searchUsersForFriends(String searchUsername) throws ApiRequestException {
+        List<User> userList = userRepository.findByUsernameLike(searchUsername);
+
+        return userList.stream().map(u -> u.craftUserPublicProfile()).collect(Collectors.toList());
     }
 
     @Override

@@ -4,6 +4,8 @@ import hr.fer.tel.ruazosa.trackingfriendsservice.exceptions.ApiRequestException;
 import hr.fer.tel.ruazosa.trackingfriendsservice.models.User;
 import hr.fer.tel.ruazosa.trackingfriendsservice.models.UserPublicProfile;
 
+import java.util.List;
+
 public interface IUserService extends IFriendshipService {
 
     /**
@@ -78,5 +80,14 @@ public interface IUserService extends IFriendshipService {
      * @throws ApiRequestException
      */
     void updateUser(User user) throws ApiRequestException;
+
+    /**
+     * Search database for users with username like searchUsername.
+     *
+     * @param searchUsername username to search for
+     * @return list of user public profiles
+     * @throws ApiRequestException
+     */
+    List<UserPublicProfile> searchUsersForFriends(String searchUsername) throws ApiRequestException;
 
 }
