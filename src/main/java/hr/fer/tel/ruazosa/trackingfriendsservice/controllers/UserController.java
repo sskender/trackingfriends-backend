@@ -136,8 +136,9 @@ public class UserController {
 
     /* searching users */
 
-    @GetMapping("/search")
+    @GetMapping("/{userId}/search")
     public ResponseEntity<List<UserPublicProfile>> seachUsers(
+            @Valid @PathVariable String userId,
             @Valid @RequestParam(value = "username", required = true) String username
     ) {
 
