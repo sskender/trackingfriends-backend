@@ -17,4 +17,6 @@ public interface IFriendshipService {
 
     void denyFriendRequest(String userId, String friendRequestId) throws ApiRequestException;
 
+    void deleteFriendship(String userId, String friendId) throws ApiRequestException;
+
 }

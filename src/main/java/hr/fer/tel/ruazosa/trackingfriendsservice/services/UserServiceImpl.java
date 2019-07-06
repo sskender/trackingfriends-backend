@@ -180,11 +180,12 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void denyFriendRequest(String userId, String friendRequestId) throws ApiRequestException {
-
-        // TODO check pending request exist
-
-        // delete pending request
         friendshipRepository.deletePendingFriendRequests(userId, friendRequestId);
+    }
+
+    @Override
+    public void deleteFriendship(String userId, String friendId) throws ApiRequestException {
+        friendshipRepository.deleteAcceptedFriendship(userId, friendId);
     }
 
 }

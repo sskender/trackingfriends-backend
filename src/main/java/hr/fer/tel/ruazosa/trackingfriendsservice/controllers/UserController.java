@@ -109,6 +109,16 @@ public class UserController {
         return new ResponseEntity<>(friendRequests, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{userId}/friends/{friendId}")
+    public ResponseEntity<Object> deleteFriendship(
+            @Valid @PathVariable String userId,
+            @Valid @PathVariable String friendId
+    ) {
+        userService.deleteFriendship(userId, friendId);
+
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
     @PostMapping("/{userId}/friends")
     public ResponseEntity<Object> sendFriendRequest(
             @Valid @PathVariable String userId,
@@ -129,7 +139,7 @@ public class UserController {
                 throw new ApiRequestException("Invalid action", HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     /* friendship */
