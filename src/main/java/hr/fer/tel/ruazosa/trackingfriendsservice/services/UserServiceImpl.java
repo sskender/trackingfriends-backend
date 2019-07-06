@@ -113,6 +113,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public List<UserPublicProfile> searchUsersByUsername(String usernameToSearch) throws ApiRequestException {
+        User.validateUsername(usernameToSearch);
+
         List<User> userList = userRepository.findByUsernameLike(usernameToSearch);
 
         return userList.stream().map(u -> u.craftUserPublicProfile()).collect(Collectors.toList());

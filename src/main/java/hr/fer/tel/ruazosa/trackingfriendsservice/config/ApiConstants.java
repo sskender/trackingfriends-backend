@@ -4,6 +4,7 @@ public abstract class ApiConstants {
 
     public final static String BASE_API_URL = "/api/v1";
     public final static String BASE_USER_URL = "/user";
+    public final static String BASE_LOCATION_URL = "/location";
 
     public final static String FRIEND_REQUEST_PARAM = "request";
     public final static String FRIEND_ACCEPT_PARAM = "accept";

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(ApiConstants.BASE_API_URL + ApiConstants.BASE_USER_URL + "/{userId}/location")
+@RequestMapping(ApiConstants.BASE_API_URL + ApiConstants.BASE_USER_URL + "/{userId}" + ApiConstants.BASE_LOCATION_URL)
 public class LocationController {
 
     private final ILocationService locationService;
@@ -37,7 +37,7 @@ public class LocationController {
             @Valid @RequestBody Location location
     ) {
         location.setUserId(userId);
-        Location updatedLocation = locationService.updateUserLocation(location);
+        locationService.updateUserLocation(location);
 
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
