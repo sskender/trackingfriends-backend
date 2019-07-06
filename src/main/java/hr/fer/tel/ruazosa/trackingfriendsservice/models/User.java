@@ -54,7 +54,7 @@ public class User implements Serializable {
      * @param username display name
      * @throws ApiRequestException
      */
-    public static void validateDisplayName(String username) throws ApiRequestException {
+    public static void validateUsername(String username) throws ApiRequestException {
         if (username == null || username.isEmpty() || username.equals(" ")) {
             throw new ApiRequestException("Invalid display name", HttpStatus.BAD_REQUEST);
         }
@@ -121,11 +121,15 @@ public class User implements Serializable {
     }
 
     /**
+     * Deprecated, this is not used anymore as passwords are now hashed.
+     *
+     *
      * Validate password.
      *
      * @param password password
      * @throws ApiRequestException
      */
+    @Deprecated
     public static void validatePassword(String password) {
         if (!(password.length() >= 8)) {
             throw new ApiRequestException("Password must contain at least 8 characters", HttpStatus.BAD_REQUEST);
@@ -138,9 +142,9 @@ public class User implements Serializable {
      * @throws ApiRequestException
      */
     public void validateUserFields() throws ApiRequestException {
-        validateDisplayName(getUsername());
+        validateUsername(getUsername());
         validateEmail(getEmail());
-        validatePassword(getPassword());
+        // validatePassword(getPassword());
     }
 
     /**

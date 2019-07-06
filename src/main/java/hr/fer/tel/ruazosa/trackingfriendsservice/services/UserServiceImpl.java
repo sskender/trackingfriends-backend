@@ -4,11 +4,12 @@ import hr.fer.tel.ruazosa.trackingfriendsservice.dao.FriendshipRepository;
 import hr.fer.tel.ruazosa.trackingfriendsservice.dao.UserRepository;
 import hr.fer.tel.ruazosa.trackingfriendsservice.exceptions.ApiRequestException;
 import hr.fer.tel.ruazosa.trackingfriendsservice.models.Friendship;
-import hr.fer.tel.ruazosa.trackingfriendsservice.models.FriendshipStatusEnum;
+import hr.fer.tel.ruazosa.trackingfriendsservice.models.FriendshipStatus;
 import hr.fer.tel.ruazosa.trackingfriendsservice.models.User;
 import hr.fer.tel.ruazosa.trackingfriendsservice.models.UserPublicProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -20,6 +21,8 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements IUserService {
 
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     private final UserRepository userRepository;
     private final FriendshipRepository friendshipRepository;
 
@@ -27,6 +30,7 @@ public class UserServiceImpl implements IUserService {
     public UserServiceImpl(UserRepository userRepository, FriendshipRepository friendshipRepository) {
         this.userRepository = userRepository;
         this.friendshipRepository = friendshipRepository;
+        this.bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
     }
 
     @Override
@@ -55,6 +59,10 @@ public class UserServiceImpl implements IUserService {
             // remove id, database will create an id
             user.setUserId(null);
 
+            // hash password
+            String hashedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+            user.setPassword(hashedPassword);
+
             // validate user before saving
             user.validateUserFields();
 
@@ -63,18 +71,21 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserPublicProfile loginUser(String email, String password) throws ApiRequestException {
+    public UserPublicProfile loginUser(String email, String rawPassword) throws ApiRequestException {
 
-        // these fields are already validated
-
-        Optional<User> optionalUser = userRepository.findByEmailAndPassword(email, password);
+        //Optional<User> optionalUser = userRepository.findByEmailAndPassword(email, rawPassword);
+        Optional<User> optionalUser = userRepository.findByEmail(email);
 
         if (optionalUser.isPresent()) {
 
-            return optionalUser.get().craftUserPublicProfile();
-        } else {
-            throw new ApiRequestException("Invalid email or password", HttpStatus.UNAUTHORIZED);
+            User userFromDB = optionalUser.get();
+
+            if (bCryptPasswordEncoder.matches(rawPassword, userFromDB.getPassword())) {
+                return userFromDB.craftUserPublicProfile();
+            }
         }
+
+        throw new ApiRequestException("Invalid email or password", HttpStatus.UNAUTHORIZED);
     }
 
     @Override
@@ -82,7 +93,7 @@ public class UserServiceImpl implements IUserService {
         User userToBeUpdated = getUserWithId(user.getUserId());
 
         if (user.getUsername() != null) {
-            User.validateDisplayName(user.getUsername());
+            User.validateUsername(user.getUsername());
             userToBeUpdated.setUsername(user.getUsername());
         }
 
@@ -92,8 +103,9 @@ public class UserServiceImpl implements IUserService {
         }
 
         if (user.getPassword() != null) {
-            User.validatePassword(user.getPassword());
-            userToBeUpdated.setPassword(user.getPassword());
+            //User.validatePassword(user.getPassword());
+            String hashedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+            userToBeUpdated.setPassword(hashedPassword);
         }
 
         userRepository.save(userToBeUpdated);
@@ -146,7 +158,7 @@ public class UserServiceImpl implements IUserService {
         // TODO check user exist
         // TODO check not friends and not send request already
 
-        Friendship friendshipRequest = new Friendship(userId, friendRequestId, FriendshipStatusEnum.PENDING);
+        Friendship friendshipRequest = new Friendship(userId, friendRequestId, FriendshipStatus.PENDING);
 
         friendshipRepository.save(friendshipRequest);
     }
@@ -160,7 +172,7 @@ public class UserServiceImpl implements IUserService {
         friendshipRepository.deletePendingFriendRequests(userId, friendRequestId);
 
         // save accepted friendship
-        Friendship newFriendship = new Friendship(userId, friendRequestId, FriendshipStatusEnum.ACCEPTED);
+        Friendship newFriendship = new Friendship(userId, friendRequestId, FriendshipStatus.ACCEPTED);
         friendshipRepository.saveAcceptedFriendship(newFriendship);
     }
 

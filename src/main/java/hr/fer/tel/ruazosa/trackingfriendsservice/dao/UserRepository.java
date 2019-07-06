@@ -20,12 +20,19 @@ public interface UserRepository extends MongoRepository<User, String> {
     Optional<User> findByEmail(String email);
 
     /**
+     * Deprecated due to BCrypt password encoding.
+     *
+     * Use findByEmail and then compare with BCryptPasswordEncoder class.
+     *
+     *
+     *
      * Validate user login with email and password.
      *
      * @param email    user email
      * @param password user password
      * @return User object
      */
+    @Deprecated
     @Query("{ 'email' : ?0 , 'password' : ?1 }")
     Optional<User> findByEmailAndPassword(String email, String password);
 

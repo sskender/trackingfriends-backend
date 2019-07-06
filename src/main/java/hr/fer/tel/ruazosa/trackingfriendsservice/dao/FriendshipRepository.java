@@ -18,7 +18,7 @@ public interface FriendshipRepository extends MongoRepository<Friendship, String
      */
     default void saveAcceptedFriendship(Friendship f) {
         // save record in both ways
-        save(new Friendship(f.getUserId2(), f.getUserId1(), f.getFriendshipStatusEnum()));
+        save(new Friendship(f.getUserId2(), f.getUserId1(), f.getFriendshipStatus()));
         save(f);
     }
 

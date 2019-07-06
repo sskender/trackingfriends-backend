@@ -46,7 +46,7 @@ public interface IUserService extends IFriendshipService {
     default UserPublicProfile loginUser(User user) throws ApiRequestException {
 
         User.validateEmail(user.getEmail());
-        User.validatePassword(user.getPassword());
+        //User.validatePassword(user.getPassword());
 
         return loginUser(user.getEmail(), user.getPassword());
     }
@@ -55,11 +55,11 @@ public interface IUserService extends IFriendshipService {
      * Login existing user into service.
      *
      * @param email    user email
-     * @param password user password
+     * @param rawPassword user password
      * @return user id
      * @throws ApiRequestException
      */
-    UserPublicProfile loginUser(String email, String password) throws ApiRequestException;
+    UserPublicProfile loginUser(String email, String rawPassword) throws ApiRequestException;
 
     /**
      * Update user as object.

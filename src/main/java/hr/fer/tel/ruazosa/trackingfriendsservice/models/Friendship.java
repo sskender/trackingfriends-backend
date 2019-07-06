@@ -23,19 +23,19 @@ public class Friendship implements Serializable {
 
     private String userId1;
     private String userId2;
-    private FriendshipStatusEnum friendshipStatusEnum;
+    private FriendshipStatus friendshipStatus;
 
     public Friendship() {
         super();
     }
 
-    public Friendship(@NotNull String userId1, @NotNull String userId2, @NotNull FriendshipStatusEnum friendshipStatusEnum) throws ApiRequestException {
+    public Friendship(@NotNull String userId1, @NotNull String userId2, @NotNull FriendshipStatus friendshipStatus) throws ApiRequestException {
         if (userId1.equals(userId2)) {
             throw new ApiRequestException("Invalid request, cannot be friends with yourself", HttpStatus.BAD_REQUEST);
         }
         this.userId1 = userId1;
         this.userId2 = userId2;
-        this.friendshipStatusEnum = friendshipStatusEnum;
+        this.friendshipStatus = friendshipStatus;
     }
 
     public String getUserId1() {
@@ -54,12 +54,12 @@ public class Friendship implements Serializable {
         this.userId2 = userId2;
     }
 
-    public FriendshipStatusEnum getFriendshipStatusEnum() {
-        return friendshipStatusEnum;
+    public FriendshipStatus getFriendshipStatus() {
+        return friendshipStatus;
     }
 
-    public void setFriendshipStatusEnum(FriendshipStatusEnum friendshipStatusEnum) {
-        this.friendshipStatusEnum = friendshipStatusEnum;
+    public void setFriendshipStatus(FriendshipStatus friendshipStatus) {
+        this.friendshipStatus = friendshipStatus;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class Friendship implements Serializable {
         return "Friendship{" +
                 "userId1='" + userId1 + '\'' +
                 ", userId2='" + userId2 + '\'' +
-                ", friendshipStatusEnum=" + friendshipStatusEnum +
+                ", friendshipStatus=" + friendshipStatus +
                 '}';
     }
 
