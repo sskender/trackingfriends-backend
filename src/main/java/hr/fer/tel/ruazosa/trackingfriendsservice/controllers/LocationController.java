@@ -1,5 +1,6 @@
 package hr.fer.tel.ruazosa.trackingfriendsservice.controllers;
 
+import hr.fer.tel.ruazosa.trackingfriendsservice.config.ApiConstants;
 import hr.fer.tel.ruazosa.trackingfriendsservice.models.Location;
 import hr.fer.tel.ruazosa.trackingfriendsservice.services.ILocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(BaseApiUrl.BASE_API_URL + "/user/{userId}/location")
+@RequestMapping(ApiConstants.BASE_API_URL + ApiConstants.BASE_USER_URL + "/{userId}/location")
 public class LocationController {
 
     private final ILocationService locationService;

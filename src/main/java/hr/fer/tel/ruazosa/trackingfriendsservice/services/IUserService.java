@@ -82,12 +82,12 @@ public interface IUserService extends IFriendshipService {
     void updateUser(User user) throws ApiRequestException;
 
     /**
-     * Search database for users with username like searchUsername.
+     * Search database for users with username like usernameToSearch.
      *
-     * @param searchUsername username to search for
+     * @param usernameToSearch username to search for
      * @return list of user public profiles
      * @throws ApiRequestException
      */
-    List<UserPublicProfile> searchUsersForFriends(String searchUsername) throws ApiRequestException;
+    List<UserPublicProfile> searchUsersByUsername(String usernameToSearch) throws ApiRequestException;
 
 }

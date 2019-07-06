@@ -1,5 +1,6 @@
 package hr.fer.tel.ruazosa.trackingfriendsservice.controllers;
 
+import hr.fer.tel.ruazosa.trackingfriendsservice.config.ApiConstants;
 import hr.fer.tel.ruazosa.trackingfriendsservice.exceptions.ApiRequestException;
 import hr.fer.tel.ruazosa.trackingfriendsservice.models.User;
 import hr.fer.tel.ruazosa.trackingfriendsservice.models.UserPublicProfile;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping(BaseApiUrl.BASE_API_URL + "/user")
+@RequestMapping(ApiConstants.BASE_API_URL + ApiConstants.BASE_USER_URL)
 public class UserController {
 
     private final IUserService userService;
@@ -115,13 +116,13 @@ public class UserController {
             @Valid @RequestParam(value = "action", required = true) String action
     ) {
         switch (action) {
-            case "request":
+            case ApiConstants.FRIEND_REQUEST_PARAM:
                 userService.sendFriendRequest(userId, friendId);
                 break;
-            case "accept":
+            case ApiConstants.FRIEND_ACCEPT_PARAM:
                 userService.acceptFriendRequest(userId, friendId);
                 break;
-            case "deny":
+            case ApiConstants.FRIEND_DENY_PARAM:
                 userService.denyFriendRequest(userId, friendId);
                 break;
             default:
@@ -144,7 +145,7 @@ public class UserController {
 
         // TODO paging
 
-        List<UserPublicProfile> userPublicProfileList = userService.searchUsersForFriends(username);
+        List<UserPublicProfile> userPublicProfileList = userService.searchUsersByUsername(username);
 
         return new ResponseEntity<>(userPublicProfileList, HttpStatus.OK);
     }

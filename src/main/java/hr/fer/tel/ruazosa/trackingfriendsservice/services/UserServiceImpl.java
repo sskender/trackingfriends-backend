@@ -4,7 +4,7 @@ import hr.fer.tel.ruazosa.trackingfriendsservice.dao.FriendshipRepository;
 import hr.fer.tel.ruazosa.trackingfriendsservice.dao.UserRepository;
 import hr.fer.tel.ruazosa.trackingfriendsservice.exceptions.ApiRequestException;
 import hr.fer.tel.ruazosa.trackingfriendsservice.models.Friendship;
-import hr.fer.tel.ruazosa.trackingfriendsservice.models.FriendshipStatus;
+import hr.fer.tel.ruazosa.trackingfriendsservice.models.FriendshipStatusEnum;
 import hr.fer.tel.ruazosa.trackingfriendsservice.models.User;
 import hr.fer.tel.ruazosa.trackingfriendsservice.models.UserPublicProfile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,8 +100,8 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public List<UserPublicProfile> searchUsersForFriends(String searchUsername) throws ApiRequestException {
-        List<User> userList = userRepository.findByUsernameLike(searchUsername);
+    public List<UserPublicProfile> searchUsersByUsername(String usernameToSearch) throws ApiRequestException {
+        List<User> userList = userRepository.findByUsernameLike(usernameToSearch);
 
         return userList.stream().map(u -> u.craftUserPublicProfile()).collect(Collectors.toList());
     }
@@ -146,7 +146,7 @@ public class UserServiceImpl implements IUserService {
         // TODO check user exist
         // TODO check not friends and not send request already
 
-        Friendship friendshipRequest = new Friendship(userId, friendRequestId, FriendshipStatus.PENDING);
+        Friendship friendshipRequest = new Friendship(userId, friendRequestId, FriendshipStatusEnum.PENDING);
 
         friendshipRepository.save(friendshipRequest);
     }
@@ -160,7 +160,7 @@ public class UserServiceImpl implements IUserService {
         friendshipRepository.deletePendingFriendRequests(userId, friendRequestId);
 
         // save accepted friendship
-        Friendship newFriendship = new Friendship(userId, friendRequestId, FriendshipStatus.ACCEPTED);
+        Friendship newFriendship = new Friendship(userId, friendRequestId, FriendshipStatusEnum.ACCEPTED);
         friendshipRepository.saveAcceptedFriendship(newFriendship);
     }
 

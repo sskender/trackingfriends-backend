@@ -1,6 +1,6 @@
 package hr.fer.tel.ruazosa.trackingfriendsservice.models;
 
-public enum FriendshipStatus {
+public enum FriendshipStatusEnum {
     ACCEPTED,
     PENDING
 }
